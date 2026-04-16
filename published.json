@@ -1,0 +1,4 @@
+{
+  "upstream": "docker/login-action",
+  "version": "v4.0.0"
+}
