@@ -1,5 +1,7 @@
 # docker/login-action
 
+GitHub Action to login against a Docker registry
+
 Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/docker/login-action](https://github.com/docker/login-action).
 
 ## Versions
