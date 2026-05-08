@@ -1,4 +1,6 @@
 {
-  "upstream": "docker/login-action",
-  "version": "v4.0.0"
+  "owner": "docker",
+  "repo": "login-action",
+  "version": "",
+  "url": "https://github.com/docker/login-action"
 }
