@@ -1,7 +1,0 @@
-{
-  "owner": "docker",
-  "name": "login-action",
-  "visibility": "internal",
-  "description": "GitHub Action to login against a Docker registry",
-  "block_publish": false
-}
