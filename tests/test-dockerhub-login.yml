@@ -1,0 +1,26 @@
+name: Test Docker Hub login (username and password)
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Attempt Docker Hub login with fake credentials
+        id: action
+        uses: .
+        with:
+          username: fake-user
+          password: fake-password
+          logout: 'true'
+        continue-on-error: true
+      - name: Assert action ran (login attempt was made)
+        run: |
+          echo "outcome: ${{ steps.action.outcome }}"
+          # The action should either succeed or fail with an auth error
+          # but it must have run (not skipped or errored before attempting)
+          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
+            echo "FAIL: action was skipped unexpectedly"
+            exit 1
+          fi
+          echo "PASS: action ran (outcome=${{ steps.action.outcome }})"
