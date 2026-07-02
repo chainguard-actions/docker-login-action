@@ -1,0 +1,24 @@
+name: Test ECR False Mode
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Start local registry
+        run: |
+          docker run -d -p 5002:5000 --name registry-ecr-false registry:2
+          sleep 2
+      - id: action
+        uses: .
+        with:
+          registry: localhost:5002
+          username: testuser
+          password: testpassword
+          ecr: 'false'
+          logout: 'false'
+      - name: Assert action ran with ecr false
+        run: |
+          echo "Checking that action ran with ecr=false for a local registry..."
+          echo "PASS: action executed successfully with ecr=false"

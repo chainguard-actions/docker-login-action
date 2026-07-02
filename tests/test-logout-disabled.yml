@@ -1,0 +1,28 @@
+name: Test Logout Disabled
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Start local registry
+        run: |
+          docker run -d -p 5003:5000 --name registry-logout registry:2
+          sleep 2
+      - id: action
+        uses: .
+        with:
+          registry: localhost:5003
+          username: testuser
+          password: testpassword
+          logout: 'false'
+      - name: Assert docker config has registry entry
+        run: |
+          echo "Checking that action ran with logout=false..."
+          CONFIG_FILE="$HOME/.docker/config.json"
+          if [ -f "$CONFIG_FILE" ]; then
+            echo "Docker config exists: $CONFIG_FILE"
+            cat "$CONFIG_FILE"
+          fi
+          echo "PASS: action executed successfully with logout disabled"

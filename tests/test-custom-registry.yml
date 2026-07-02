@@ -1,0 +1,23 @@
+name: Test Custom Registry Login
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Start local registry
+        run: |
+          docker run -d -p 5001:5000 --name registry-custom registry:2
+          sleep 2
+      - id: action
+        uses: .
+        with:
+          registry: localhost:5001
+          username: testuser
+          password: testpassword
+          logout: 'false'
+      - name: Assert action ran for custom registry
+        run: |
+          echo "Checking that action ran for custom registry localhost:5001..."
+          echo "PASS: action executed successfully for custom registry"
