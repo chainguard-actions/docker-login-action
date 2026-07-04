@@ -1,0 +1,36 @@
+name: Test Docker Login with Logout Enabled
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Start local registry
+        run: |
+          docker run -d -p 5003:5000 --name registry-logout registry:2
+          sleep 2
+      - name: Login to local registry with logout enabled
+        id: login
+        uses: .
+        with:
+          registry: localhost:5003
+          username: testuser
+          password: testpassword
+          logout: 'true'
+      - name: Assert login step completed
+        run: |
+          echo "Login step with logout=true completed successfully"
+          if [ -f "$HOME/.docker/config.json" ]; then
+            echo "Docker config exists"
+            cat "$HOME/.docker/config.json"
+            if grep -q "localhost:5003" "$HOME/.docker/config.json"; then
+              echo "PASS: localhost:5003 found in docker config (logout happens post-job)"
+            else
+              echo "FAIL: localhost:5003 not found in docker config"
+              exit 1
+            fi
+          else
+            echo "FAIL: Docker config not found"
+            exit 1
+          fi

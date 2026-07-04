@@ -1,0 +1,37 @@
+name: Test Non-ECR Registry Login
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Start local registry
+        run: |
+          docker run -d -p 5002:5000 --name registry-ecr-false registry:2
+          sleep 2
+      - name: Login to registry with ecr=false
+        id: login
+        uses: .
+        with:
+          registry: localhost:5002
+          username: testuser
+          password: testpassword
+          ecr: 'false'
+          logout: 'false'
+      - name: Assert login step completed with ecr=false
+        run: |
+          echo "Login with ecr=false completed successfully"
+          if [ -f "$HOME/.docker/config.json" ]; then
+            echo "Docker config exists"
+            cat "$HOME/.docker/config.json"
+            if grep -q "localhost:5002" "$HOME/.docker/config.json"; then
+              echo "PASS: localhost:5002 found in docker config"
+            else
+              echo "FAIL: localhost:5002 not found in docker config"
+              exit 1
+            fi
+          else
+            echo "FAIL: Docker config not found"
+            exit 1
+          fi
