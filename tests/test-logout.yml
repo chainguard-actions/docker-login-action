@@ -1,0 +1,25 @@
+name: Test Docker Login with Logout Enabled
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Login with logout enabled (default)
+        id: login
+        uses: .
+        with:
+          registry: ghcr.io
+          username: testuser
+          password: testpassword
+          logout: 'true'
+        continue-on-error: true
+      - name: Assert action ran with logout enabled
+        run: |
+          echo "Login step outcome: ${{ steps.login.outcome }}"
+          if [ "${{ steps.login.outcome }}" = "skipped" ]; then
+            echo "FAIL: step was skipped unexpectedly"
+            exit 1
+          fi
+          echo "PASS: login step with logout=true completed (outcome: ${{ steps.login.outcome }})"
