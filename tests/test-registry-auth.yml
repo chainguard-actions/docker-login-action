@@ -6,21 +6,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Login with registry-auth parameter
-        id: login
+      - name: Start local Docker registries
+        run: |
+          docker run -d -p 5010:5000 --name registry-auth-1 registry:2
+          docker run -d -p 5011:5000 --name registry-auth-2 registry:2
+          sleep 2
+          echo "Local registries started on ports 5010 and 5011"
+      - id: action
         uses: .
         with:
           registry-auth: |
-            - registry: ghcr.io
-              username: testuser
-              password: testpassword
+            - registry: localhost:5010
+              username: user1
+              password: pass1
+            - registry: localhost:5011
+              username: user2
+              password: pass2
           logout: 'false'
-        continue-on-error: true
-      - name: Assert action ran with registry-auth parameter
+      - name: Assert registry-auth credentials are present
         run: |
-          echo "Login step outcome: ${{ steps.login.outcome }}"
-          if [ "${{ steps.login.outcome }}" = "skipped" ]; then
-            echo "FAIL: step was skipped unexpectedly"
+          echo "Checking Docker config for registry credentials"
+          CONFIG=$(cat ~/.docker/config.json)
+          echo "Docker config: $CONFIG"
+          if ! echo "$CONFIG" | grep -q "localhost:5010"; then
+            echo "FAIL: expected localhost:5010 to be in Docker config"
             exit 1
           fi
-          echo "PASS: login step with registry-auth completed (outcome: ${{ steps.login.outcome }})"
+          if ! echo "$CONFIG" | grep -q "localhost:5011"; then
+            echo "FAIL: expected localhost:5011 to be in Docker config"
+            exit 1
+          fi
+          echo "PASS: both registry credentials found in Docker config"
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop registry-auth-1 registry-auth-2 || true
+          docker rm registry-auth-1 registry-auth-2 || true

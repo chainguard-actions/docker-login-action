@@ -6,21 +6,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Login to Docker Hub
-        id: login
+      - name: Set up fake Docker Hub credentials
+        run: |
+          # We'll test with a registry that doesn't require real credentials
+          # by using a local registry instead
+          echo "Setting up test environment"
+      - name: Start local Docker registry
+        run: |
+          docker run -d -p 5000:5000 --name registry registry:2
+          sleep 2
+          echo "Local registry started"
+      - id: action
         uses: .
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME || 'testuser' }}
-          password: ${{ secrets.DOCKERHUB_TOKEN || 'testpassword' }}
-          logout: 'false'
-        continue-on-error: true
-      - name: Assert action ran (login attempted)
+          registry: localhost:5000
+          username: testuser
+          password: testpassword
+          logout: 'true'
+      - name: Assert login succeeded
         run: |
-          echo "Login step outcome: ${{ steps.login.outcome }}"
-          # The action should either succeed or fail with an auth error (not a crash)
-          # We just verify the step completed (not skipped)
-          if [ "${{ steps.login.outcome }}" = "skipped" ]; then
-            echo "FAIL: step was skipped unexpectedly"
+          echo "Checking Docker config for registry credentials"
+          if ! cat ~/.docker/config.json | grep -q "localhost:5000"; then
+            echo "FAIL: expected localhost:5000 to be in Docker config"
             exit 1
           fi
-          echo "PASS: login step completed (outcome: ${{ steps.login.outcome }})"
+          echo "PASS: registry credentials found in Docker config"
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop registry || true
+          docker rm registry || true

@@ -6,21 +6,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Login with ECR explicitly disabled
-        id: login
+      - name: Start local Docker registry
+        run: |
+          docker run -d -p 5002:5000 --name registry-ecr-false registry:2
+          sleep 2
+          echo "Local registry started on port 5002"
+      - id: action
         uses: .
         with:
-          registry: ghcr.io
+          registry: localhost:5002
           username: testuser
           password: testpassword
           ecr: 'false'
-          logout: 'false'
-        continue-on-error: true
-      - name: Assert action ran with ecr=false
+          logout: 'true'
+      - name: Assert login succeeded with ecr=false
         run: |
-          echo "Login step outcome: ${{ steps.login.outcome }}"
-          if [ "${{ steps.login.outcome }}" = "skipped" ]; then
-            echo "FAIL: step was skipped unexpectedly"
+          echo "Checking Docker config for registry credentials"
+          if ! cat ~/.docker/config.json | grep -q "localhost:5002"; then
+            echo "FAIL: expected localhost:5002 to be in Docker config"
             exit 1
           fi
-          echo "PASS: login step with ecr=false completed (outcome: ${{ steps.login.outcome }})"
+          echo "PASS: registry credentials found in Docker config with ecr=false"
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop registry-ecr-false || true
+          docker rm registry-ecr-false || true

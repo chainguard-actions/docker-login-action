@@ -1,0 +1,33 @@
+name: Test Docker Login with Logout Disabled
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Start local Docker registry
+        run: |
+          docker run -d -p 5001:5000 --name registry-nologout registry:2
+          sleep 2
+          echo "Local registry started on port 5001"
+      - id: action
+        uses: .
+        with:
+          registry: localhost:5001
+          username: testuser
+          password: testpassword
+          logout: 'false'
+      - name: Assert login succeeded and credentials are present
+        run: |
+          echo "Checking Docker config for registry credentials"
+          if ! cat ~/.docker/config.json | grep -q "localhost:5001"; then
+            echo "FAIL: expected localhost:5001 to be in Docker config"
+            exit 1
+          fi
+          echo "PASS: registry credentials found in Docker config with logout disabled"
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop registry-nologout || true
+          docker rm registry-nologout || true
