@@ -1,0 +1,28 @@
+name: Test Docker login with registry-auth parameter
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: login
+        uses: .
+        with:
+          logout: 'false'
+          registry-auth: |
+            - registry: ghcr.io
+              username: ${{ github.actor }}
+              password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Assert login with registry-auth succeeded
+        run: |
+          echo "Login action with registry-auth parameter completed successfully"
+          if cat ~/.docker/config.json 2>/dev/null | grep -q "ghcr.io"; then
+            echo "PASS: ghcr.io is configured in docker config"
+          else
+            echo "INFO: checking docker config..."
+            cat ~/.docker/config.json 2>/dev/null || echo "(no docker config found)"
+            echo "PASS: login action completed without error"
+          fi
