@@ -13,6 +13,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | v4.2.0 | [`v4.2.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.2.0) | [`650006c`](https://github.com/docker/login-action/commit/650006c6eb7dba73a995cc03b0b2d7f5ca915bee) |
 | v4.3.0 | [`v4.3.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.3.0) | [`c99871d`](https://github.com/docker/login-action/commit/c99871dec2022cc055c062a10cc1a1310835ceb4) |
 | v4.4.0 | [`v4.4.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.4.0) | [`af1e73f`](https://github.com/docker/login-action/commit/af1e73f918a031802d376d3c8bbc3fe56130a9b0) |
+| v4.5.0 | [`v4.5.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.5.0) | [`06fb636`](https://github.com/docker/login-action/commit/06fb636fac595d6fb4b28a5dfcb21a6f5091859c) |
 
 ## Privacy
 
