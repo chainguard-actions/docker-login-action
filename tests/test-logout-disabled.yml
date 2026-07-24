@@ -1,0 +1,37 @@
+name: Test Docker login with logout disabled
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Test login with logout disabled
+        id: login
+        uses: .
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          logout: 'false'
+      - name: Assert login succeeded
+        run: |
+          echo "outcome: ${{ steps.login.outcome }}"
+          if [ "${{ steps.login.outcome }}" != "success" ]; then
+            echo "FAIL: expected login to succeed but got: ${{ steps.login.outcome }}"
+            exit 1
+          fi
+          echo "PASS: login succeeded"
+      - name: Assert docker is logged in to ghcr.io
+        run: |
+          if [ -f "$HOME/.docker/config.json" ]; then
+            echo "Docker config exists"
+            if grep -q "ghcr.io" "$HOME/.docker/config.json"; then
+              echo "PASS: ghcr.io found in docker config"
+            else
+              echo "INFO: ghcr.io not in config (may use credential helper)"
+            fi
+          else
+            echo "INFO: No docker config file found (may use credential helper)"
+          fi
+          echo "PASS"

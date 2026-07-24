@@ -1,0 +1,28 @@
+name: Test scope input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          scope: 'repository:${{ github.repository }}:pull'
+          logout: 'true'
+      - name: Assert login succeeded
+        run: |
+          echo "Checking Docker config for ghcr.io credentials..."
+          if [ ! -f "$HOME/.docker/config.json" ]; then
+            echo "FAIL: Docker config.json not found"
+            exit 1
+          fi
+          if ! grep -q "ghcr.io" "$HOME/.docker/config.json"; then
+            echo "FAIL: ghcr.io not found in Docker config"
+            exit 1
+          fi
+          echo "PASS: scope input accepted and login succeeded"

@@ -1,0 +1,25 @@
+name: Test Docker login with ECR disabled
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Login with ECR explicitly disabled
+        id: login
+        uses: .
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          ecr: 'false'
+          logout: 'true'
+      - name: Assert login succeeded with ECR=false
+        run: |
+          echo "outcome: ${{ steps.login.outcome }}"
+          if [ "${{ steps.login.outcome }}" != "success" ]; then
+            echo "FAIL: expected login to succeed with ecr=false but got: ${{ steps.login.outcome }}"
+            exit 1
+          fi
+          echo "PASS: login with ecr=false succeeded"
