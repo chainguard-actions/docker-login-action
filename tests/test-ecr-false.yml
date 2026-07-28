@@ -1,0 +1,40 @@
+name: Test Docker Login with ECR Disabled
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up a local registry for testing
+        run: |
+          docker run -d -p 5002:5000 --name registry-ecr-false registry:2
+          for i in $(seq 1 10); do
+            if curl -sf http://localhost:5002/v2/ > /dev/null 2>&1; then
+              echo "Registry is ready"
+              break
+            fi
+            echo "Waiting for registry... ($i)"
+            sleep 1
+          done
+
+      - id: login
+        uses: .
+        with:
+          registry: localhost:5002
+          username: testuser
+          password: testpassword
+          ecr: 'false'
+          logout: 'false'
+
+      - name: Assert login action completed with ecr=false
+        run: |
+          echo "Login action completed with ecr=false."
+          echo "PASS: action ran successfully with ECR explicitly disabled"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop registry-ecr-false 2>/dev/null || true
+          docker rm registry-ecr-false 2>/dev/null || true

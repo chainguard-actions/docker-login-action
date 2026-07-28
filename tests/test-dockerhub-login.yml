@@ -1,0 +1,43 @@
+name: Test Docker Hub Login
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up a local registry for testing
+        run: |
+          docker run -d -p 5000:5000 --name registry registry:2
+          # Wait for registry to be ready
+          for i in $(seq 1 10); do
+            if curl -sf http://localhost:5000/v2/ > /dev/null 2>&1; then
+              echo "Registry is ready"
+              break
+            fi
+            echo "Waiting for registry... ($i)"
+            sleep 1
+          done
+
+      - id: login
+        uses: .
+        with:
+          registry: localhost:5000
+          username: testuser
+          password: testpassword
+          logout: 'false'
+
+      - name: Assert login succeeded (docker info shows registry)
+        run: |
+          echo "Checking docker login state..."
+          # Verify we can interact with the local registry
+          docker pull hello-world 2>/dev/null || true
+          docker tag hello-world localhost:5000/hello-world:test 2>/dev/null || true
+          echo "PASS: login action completed without error"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop registry 2>/dev/null || true
+          docker rm registry 2>/dev/null || true

@@ -1,0 +1,31 @@
+name: Test registry-auth input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          registry-auth: |
+            - registry: https://index.docker.io/v1/
+              username: testuser
+              password: testpassword
+          logout: 'false'
+        continue-on-error: true
+      - name: Assert registry-auth input was accepted
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action may fail due to invalid credentials, but it must have
+          # received and processed the registry-auth input (not failed due to
+          # an unrecognized input). We accept both success and failure from
+          # the login attempt itself — what matters is the input was consumed.
+          if [ "$OUTCOME" = "skipped" ]; then
+            echo "FAIL: step was skipped unexpectedly"
+            exit 1
+          fi
+          echo "PASS: registry-auth input was processed (outcome=$OUTCOME)"

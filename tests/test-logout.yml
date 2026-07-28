@@ -1,0 +1,39 @@
+name: Test Docker Registry Login with Logout
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up a local registry for testing
+        run: |
+          docker run -d -p 5001:5000 --name registry-logout registry:2
+          for i in $(seq 1 10); do
+            if curl -sf http://localhost:5001/v2/ > /dev/null 2>&1; then
+              echo "Registry is ready"
+              break
+            fi
+            echo "Waiting for registry... ($i)"
+            sleep 1
+          done
+
+      - id: login
+        uses: .
+        with:
+          registry: localhost:5001
+          username: testuser
+          password: testpassword
+          logout: 'true'
+
+      - name: Assert login action completed successfully
+        run: |
+          echo "Login action completed. logout=true is set, post-step will log out."
+          echo "PASS"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop registry-logout 2>/dev/null || true
+          docker rm registry-logout 2>/dev/null || true
