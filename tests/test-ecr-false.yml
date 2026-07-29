@@ -1,0 +1,38 @@
+name: Test Docker login with ECR disabled
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create a test Docker config dir
+        run: |
+          mkdir -p "$HOME/.docker"
+          echo '{}' > "$HOME/.docker/config.json"
+
+      - id: login
+        uses: .
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          ecr: 'false'
+          logout: 'false'
+
+      - name: Assert login succeeded with ecr=false
+        run: |
+          echo "Checking Docker config for ghcr.io auth..."
+          if [ ! -f "$HOME/.docker/config.json" ]; then
+            echo "FAIL: Docker config.json not found"
+            exit 1
+          fi
+          CONFIG=$(cat "$HOME/.docker/config.json")
+          echo "Docker config: $CONFIG"
+          if echo "$CONFIG" | grep -q "ghcr.io"; then
+            echo "PASS: ghcr.io found in Docker config with ecr=false"
+          else
+            echo "FAIL: ghcr.io not found in Docker config"
+            exit 1
+          fi

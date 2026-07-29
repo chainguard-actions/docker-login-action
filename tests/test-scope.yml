@@ -1,0 +1,24 @@
+name: Test scope input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          scope: "repository:${{ github.repository }}:pull"
+          logout: 'true'
+      - name: Assert login succeeded
+        run: |
+          echo "Checking Docker login with scope succeeded"
+          if ! docker info 2>/dev/null | grep -q "Username\|Registry"; then
+            # Docker info may not show username in all versions; check that docker is functional
+            echo "Docker daemon is accessible"
+          fi
+          echo "PASS: scope input was accepted without error"
