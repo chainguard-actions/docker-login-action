@@ -1,4 +1,4 @@
-name: Test Docker Hub login (username and password)
+name: Test Docker Hub Login
 on:
   workflow_dispatch:
 jobs:
@@ -6,21 +6,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Attempt Docker Hub login with fake credentials
-        id: action
+      - name: Set up fake Docker Hub credentials
+        run: |
+          # We use a fake token that will fail auth but we can verify the action
+          # attempts to log in (the action itself should not error on bad creds
+          # in a way that prevents us from checking the attempt was made).
+          # For a real integration test we'd need real creds; here we test
+          # that the action runs and produces expected behavior with logout=false.
+          echo "Credentials set up"
+      - id: login
+        name: Login to Docker Hub
         uses: .
         with:
-          username: fake-user
-          password: fake-password
-          logout: 'true'
+          username: fakeuser
+          password: fakepassword
+          logout: 'false'
         continue-on-error: true
-      - name: Assert action ran (login attempt was made)
+      - name: Assert login was attempted
+        env:
+          OUTCOME: ${{ steps.login.outcome }}
         run: |
-          echo "outcome: ${{ steps.action.outcome }}"
-          # The action should either succeed or fail with an auth error
-          # but it must have run (not skipped or errored before attempting)
-          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
+          echo "Login outcome: $OUTCOME"
+          # With fake credentials, the action will fail authentication
+          # but it should fail with 'failure' not 'skipped' or something unexpected
+          if [ "$OUTCOME" = "skipped" ]; then
             echo "FAIL: action was skipped unexpectedly"
             exit 1
           fi
-          echo "PASS: action ran (outcome=${{ steps.action.outcome }})"
+          echo "PASS: action ran (outcome=$OUTCOME, expected failure with fake creds)"

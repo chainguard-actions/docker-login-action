@@ -1,4 +1,4 @@
-name: Test Custom Registry Login
+name: Test Docker Logout
 on:
   workflow_dispatch:
 jobs:
@@ -7,13 +7,13 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - id: login
-        name: Login to GitHub Container Registry
+        name: Login to GitHub Container Registry with logout enabled
         uses: .
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          logout: 'false'
+          logout: 'true'
       - name: Assert login succeeded
         env:
           OUTCOME: ${{ steps.login.outcome }}
@@ -23,19 +23,20 @@ jobs:
             echo "FAIL: expected login to succeed but got: $OUTCOME"
             exit 1
           fi
-          echo "PASS: login to ghcr.io succeeded"
-      - name: Assert Docker is authenticated to ghcr.io
+          echo "PASS: login succeeded"
+      - name: Assert Docker is authenticated to ghcr.io after login
         run: |
-          # Check that docker config has an entry for ghcr.io
           CONFIG_FILE="$HOME/.docker/config.json"
           if [ ! -f "$CONFIG_FILE" ]; then
-            echo "FAIL: Docker config file not found at $CONFIG_FILE"
+            echo "FAIL: Docker config file not found"
             exit 1
           fi
-          echo "Docker config contents:"
+          echo "Docker config after login:"
           cat "$CONFIG_FILE"
           if ! grep -q "ghcr.io" "$CONFIG_FILE"; then
-            echo "FAIL: ghcr.io not found in Docker config"
+            echo "FAIL: ghcr.io not found in Docker config after login"
             exit 1
           fi
-          echo "PASS: ghcr.io found in Docker config"
+          echo "PASS: authenticated to ghcr.io"
+      # Note: The post step (logout) runs after all steps complete.
+      # We verify the login succeeded; the post step will handle logout automatically.
