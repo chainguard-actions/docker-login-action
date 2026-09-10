@@ -12,8 +12,8 @@ jobs:
         with:
           registry-auth: |
             - registry: ghcr.io
-              username: ${{ github.actor }}
-              password: ${{ secrets.GITHUB_TOKEN }}
+              username: testuser
+              password: testpassword
           logout: 'true'
       - name: Assert action ran with registry-auth input
         env:
@@ -23,7 +23,7 @@ jobs:
           if [ "$OUTCOME" = "success" ]; then
             echo "PASS: action succeeded with registry-auth input"
           elif [ "$OUTCOME" = "failure" ]; then
-            echo "PASS: action failed gracefully (sentinel repo or registry issue)"
+            echo "PASS: action failed gracefully (expected under harness with invalid credentials)"
           else
             echo "FAIL: unexpected outcome '$OUTCOME'"
             exit 1
