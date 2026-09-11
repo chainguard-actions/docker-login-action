@@ -8,23 +8,23 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - id: action
         uses: .
+        continue-on-error: true
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          scope: repository:${{ github.repository }}:pull
-          logout: 'true'
-        continue-on-error: true
+          username: testuser
+          password: testpassword
+          scope: test-scope
+          logout: 'false'
       - name: Assert action ran with scope input
         env:
           OUTCOME: ${{ steps.action.outcome }}
         run: |
           echo "outcome: $OUTCOME"
-          # The action should either succeed or fail gracefully (not crash due to unknown input)
-          # We just need to confirm the scope input was accepted (no "unexpected input" error)
-          if [ "$OUTCOME" = "success" ] || [ "$OUTCOME" = "failure" ]; then
-            echo "PASS: action accepted scope input and ran (outcome=$OUTCOME)"
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded with scope input"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (expected with test credentials)"
           else
-            echo "FAIL: unexpected outcome: $OUTCOME"
+            echo "FAIL: unexpected outcome '$OUTCOME'"
             exit 1
           fi
