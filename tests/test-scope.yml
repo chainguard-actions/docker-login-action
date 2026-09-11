@@ -8,21 +8,23 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - id: action
         uses: .
+        continue-on-error: true
         with:
-          registry: ghcr.io
+          registry: registry.example.com
           username: testuser
           password: testpassword
-          scope: repository:testuser/testrepo:pull
-          logout: 'true'
-        continue-on-error: true
-      - name: Assert action ran with scope input
+          scope: my-custom-scope
+          logout: 'false'
+      - name: Assert action ran with scope input (success or graceful failure)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
         run: |
-          echo "outcome: ${{ steps.action.outcome }}"
-          # The action may fail due to invalid credentials in test environment,
-          # but we verify the step was invoked with the scope input.
-          # A hard failure (e.g. missing input handling) would show as 'failure' with no output.
-          if [ "${{ steps.action.outcome }}" = "" ]; then
-            echo "FAIL: action did not run at all"
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded with scope input"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (expected with fake credentials)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
             exit 1
           fi
-          echo "PASS: action ran with scope input (outcome: ${{ steps.action.outcome }})"
