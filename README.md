@@ -8,6 +8,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
+| v3.7.0 | [`v3.7.0`](https://github.com/chainguard-actions/docker-login-action/tree/v3.7.0) | [`c94ce9f`](https://github.com/docker/login-action/commit/c94ce9fb468520275223c153574b00df6fe4bcc9) |
 | v4.0.0 | [`v4.0.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.0.0) | [`b45d80f`](https://github.com/docker/login-action/commit/b45d80f862d83dbcd57f89517bcf500b2ab88fb2) |
 | v4.1.0 | [`v4.1.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.1.0) | [`4907a6d`](https://github.com/docker/login-action/commit/4907a6ddec9925e35a0a9e82d7399ccc52663121) |
 | v4.2.0 | [`v4.2.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.2.0) | [`650006c`](https://github.com/docker/login-action/commit/650006c6eb7dba73a995cc03b0b2d7f5ca915bee) |
