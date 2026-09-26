@@ -1,0 +1,32 @@
+name: Test custom registry login
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Attempt login to custom registry with fake credentials
+        id: login
+        uses: .
+        with:
+          registry: registry.example.com
+          username: fakeuser
+          password: fakepassword
+        continue-on-error: true
+
+      - name: Assert login failed gracefully for unreachable registry
+        env:
+          OUTCOME: ${{ steps.login.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully as expected for unreachable/fake registry"
+          elif [ "$OUTCOME" = "success" ]; then
+            echo "FAIL: action unexpectedly succeeded with fake registry credentials"
+            exit 1
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

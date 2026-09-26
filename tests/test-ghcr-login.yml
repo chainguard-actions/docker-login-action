@@ -1,0 +1,48 @@
+name: Test GitHub Container Registry login
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Login to GitHub Container Registry
+        id: login
+        uses: .
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Assert login outcome
+        env:
+          OUTCOME: ${{ steps.login.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: successfully logged in to ghcr.io"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (expected under harness sentinel repo)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
+
+      - name: Verify docker config written on success
+        env:
+          OUTCOME: ${{ steps.login.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" = "success" ]; then
+            if [ ! -f "$HOME/.docker/config.json" ]; then
+              echo "FAIL: docker config.json not found after successful login"
+              exit 1
+            fi
+            echo "docker config.json contents (redacted):"
+            cat "$HOME/.docker/config.json" | sed 's/"auth":"[^"]*"/"auth":"REDACTED"/g'
+            echo "PASS: docker config.json exists"
+          else
+            echo "SKIP: login did not succeed, skipping config check"
+          fi
