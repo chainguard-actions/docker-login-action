@@ -6,19 +6,19 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 ## Versions
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v3.7.0 | [`v3.7.0`](https://github.com/chainguard-actions/docker-login-action/tree/v3.7.0) | [`c94ce9f`](https://github.com/docker/login-action/commit/c94ce9fb468520275223c153574b00df6fe4bcc9) |
-| v4.0.0 | [`v4.0.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.0.0) | [`b45d80f`](https://github.com/docker/login-action/commit/b45d80f862d83dbcd57f89517bcf500b2ab88fb2) |
-| v4.1.0 | [`v4.1.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.1.0) | [`4907a6d`](https://github.com/docker/login-action/commit/4907a6ddec9925e35a0a9e82d7399ccc52663121) |
-| v4.2.0 | [`v4.2.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.2.0) | [`650006c`](https://github.com/docker/login-action/commit/650006c6eb7dba73a995cc03b0b2d7f5ca915bee) |
-| v4.3.0 | [`v4.3.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.3.0) | [`c99871d`](https://github.com/docker/login-action/commit/c99871dec2022cc055c062a10cc1a1310835ceb4) |
-| v4.4.0 | [`v4.4.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.4.0) | [`af1e73f`](https://github.com/docker/login-action/commit/af1e73f918a031802d376d3c8bbc3fe56130a9b0) |
-| v4.5.0 | [`v4.5.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.5.0) | [`06fb636`](https://github.com/docker/login-action/commit/06fb636fac595d6fb4b28a5dfcb21a6f5091859c) |
-| v4.5.1 | [`v4.5.1`](https://github.com/chainguard-actions/docker-login-action/tree/v4.5.1) | [`abd2ef4`](https://github.com/docker/login-action/commit/abd2ef45e78c5afb21d64d4ca52ee8550d9572c7) |
-| v4.5.2 | [`v4.5.2`](https://github.com/chainguard-actions/docker-login-action/tree/v4.5.2) | [`371161b`](https://github.com/docker/login-action/commit/371161bbe7024a29a25c5e19bfcbc0804fe9ad2c) |
-| v4.6.0 | [`v4.6.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.6.0) | [`dbcb813`](https://github.com/docker/login-action/commit/dbcb813823bdd20940b903addbd779551569679f) |
-| v4.7.0 | [`v4.7.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.7.0) | [`81c6f93`](https://github.com/docker/login-action/commit/81c6f93d4bc991e510b342a00b419b3bb4efc5c6) |
+| Version | Tag | Upstream commit | Hardening report |
+|---------|-----|-----------------|------------------|
+| v3.7.0 | [`v3.7.0`](https://github.com/chainguard-actions/docker-login-action/tree/v3.7.0) | [`c94ce9f`](https://github.com/docker/login-action/commit/c94ce9fb468520275223c153574b00df6fe4bcc9) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v3.7.0/HARDENING.md) |
+| v4.0.0 | [`v4.0.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.0.0) | [`b45d80f`](https://github.com/docker/login-action/commit/b45d80f862d83dbcd57f89517bcf500b2ab88fb2) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.0.0/HARDENING.md) |
+| v4.1.0 | [`v4.1.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.1.0) | [`4907a6d`](https://github.com/docker/login-action/commit/4907a6ddec9925e35a0a9e82d7399ccc52663121) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.1.0/HARDENING.md) |
+| v4.2.0 | [`v4.2.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.2.0) | [`650006c`](https://github.com/docker/login-action/commit/650006c6eb7dba73a995cc03b0b2d7f5ca915bee) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.2.0/HARDENING.md) |
+| v4.3.0 | [`v4.3.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.3.0) | [`c99871d`](https://github.com/docker/login-action/commit/c99871dec2022cc055c062a10cc1a1310835ceb4) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.3.0/HARDENING.md) |
+| v4.4.0 | [`v4.4.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.4.0) | [`af1e73f`](https://github.com/docker/login-action/commit/af1e73f918a031802d376d3c8bbc3fe56130a9b0) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.4.0/HARDENING.md) |
+| v4.5.0 | [`v4.5.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.5.0) | [`06fb636`](https://github.com/docker/login-action/commit/06fb636fac595d6fb4b28a5dfcb21a6f5091859c) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.5.0/HARDENING.md) |
+| v4.5.1 | [`v4.5.1`](https://github.com/chainguard-actions/docker-login-action/tree/v4.5.1) | [`abd2ef4`](https://github.com/docker/login-action/commit/abd2ef45e78c5afb21d64d4ca52ee8550d9572c7) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.5.1/HARDENING.md) |
+| v4.5.2 | [`v4.5.2`](https://github.com/chainguard-actions/docker-login-action/tree/v4.5.2) | [`371161b`](https://github.com/docker/login-action/commit/371161bbe7024a29a25c5e19bfcbc0804fe9ad2c) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.5.2/HARDENING.md) |
+| v4.6.0 | [`v4.6.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.6.0) | [`dbcb813`](https://github.com/docker/login-action/commit/dbcb813823bdd20940b903addbd779551569679f) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.6.0/HARDENING.md) |
+| v4.7.0 | [`v4.7.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.7.0) | [`81c6f93`](https://github.com/docker/login-action/commit/81c6f93d4bc991e510b342a00b419b3bb4efc5c6) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.7.0/HARDENING.md) |
 
 ## Privacy
 
