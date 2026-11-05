@@ -19,6 +19,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | v4.5.2 | [`v4.5.2`](https://github.com/chainguard-actions/docker-login-action/tree/v4.5.2) | [`371161b`](https://github.com/docker/login-action/commit/371161bbe7024a29a25c5e19bfcbc0804fe9ad2c) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.5.2/HARDENING.md) |
 | v4.6.0 | [`v4.6.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.6.0) | [`dbcb813`](https://github.com/docker/login-action/commit/dbcb813823bdd20940b903addbd779551569679f) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.6.0/HARDENING.md) |
 | v4.7.0 | [`v4.7.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.7.0) | [`81c6f93`](https://github.com/docker/login-action/commit/81c6f93d4bc991e510b342a00b419b3bb4efc5c6) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.7.0/HARDENING.md) |
+| v4.8.0 | [`v4.8.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.8.0) | [`8aa5831`](https://github.com/docker/login-action/commit/8aa5831fb8d48d8f76594c7ddde61ae58019f550) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v4.8.0/HARDENING.md) |
 
 ## Privacy
 
