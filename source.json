@@ -1,6 +1,16 @@
 {
   "owner": "docker",
   "repo": "login-action",
-  "version": "",
-  "url": "https://github.com/docker/login-action"
+  "version": "v2.0.0",
+  "commit_sha": "49ed152c8eca782a232dede0303416e8f356c37b",
+  "url": "https://github.com/docker/login-action",
+  "policy_sha": "374911c4be584df24e6da57af2d990570ef0f859",
+  "test_policy_sha": "843adf9e4b8f85d0c08b27b9d0b09dd094b54702",
+  "test_agent_version": "2",
+  "harden_agent_version": "2",
+  "dist_artifact": {
+    "gcs_uri": "gs://patch-actions-node-artifacts/dist-artifacts/docker/login-action/v2.0.0/sha256-e7ad0eec0f0579047582ef939153a8f363493fe1566fcb8e2cb9f0549285a2bb.tar.gz",
+    "sha256": "e7ad0eec0f0579047582ef939153a8f363493fe1566fcb8e2cb9f0549285a2bb",
+    "size_bytes": 369315
+  }
 }
