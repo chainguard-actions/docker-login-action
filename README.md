@@ -9,6 +9,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | Version | Tag | Upstream commit | Hardening report |
 |---------|-----|-----------------|------------------|
 | v2.0.0 | [`v2.0.0`](https://github.com/chainguard-actions/docker-login-action/tree/v2.0.0) | [`49ed152`](https://github.com/docker/login-action/commit/49ed152c8eca782a232dede0303416e8f356c37b) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v2.0.0/HARDENING.md) |
+| v2.2.0 | [`v2.2.0`](https://github.com/chainguard-actions/docker-login-action/tree/v2.2.0) | [`465a078`](https://github.com/docker/login-action/commit/465a07811f14bebb1938fbed4728c6a1ff8901fc) | [`HARDENING.md`](https://github.com/chainguard-actions/docker-login-action/blob/v2.2.0/HARDENING.md) |
 | v3.7.0 | [`v3.7.0`](https://github.com/chainguard-actions/docker-login-action/tree/v3.7.0) | [`c94ce9f`](https://github.com/docker/login-action/commit/c94ce9fb468520275223c153574b00df6fe4bcc9) | — |
 | v4.0.0 | [`v4.0.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.0.0) | [`b45d80f`](https://github.com/docker/login-action/commit/b45d80f862d83dbcd57f89517bcf500b2ab88fb2) | — |
 | v4.1.0 | [`v4.1.0`](https://github.com/chainguard-actions/docker-login-action/tree/v4.1.0) | [`4907a6d`](https://github.com/docker/login-action/commit/4907a6ddec9925e35a0a9e82d7399ccc52663121) | — |
